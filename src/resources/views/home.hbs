@@ -1,0 +1,83 @@
+<div class="homeapp">
+
+    <div class="scrollbar">
+        {{#each journeys}}
+        <div class="card mb-3" style="max-width: 400px;">
+            <a class="card-link" href="/journeys/{{this.slug}}">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">{{this.first_last}}</p>
+                            <p class="card-text"><small class="text-muted">Thời gian: {{this.time}}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {{/each}}
+    </div>
+    <div style="width:70%;" id="viewDiv"
+        class="esri-view esri-view-height-xsmall esri-view-height-less-than-small esri-view-height-less-than-medium esri-view-height-less-than-large esri-view-height-less-than-xlarge esri-view-orientation-landscape esri-view-width-xsmall esri-view-width-less-than-small esri-view-width-less-than-medium esri-view-width-less-than-large esri-view-width-less-than-xlarge">
+        <div class="esri-view-root">
+            <div class="esri-view-surface esri-view-surface--touch-none" role="application" tabindex="0">
+                <canvas style="width: 478px; height: 450px; display: block;" width="478" height="450">
+                </canvas>
+            </div>
+            <div class="esri-overlay-surface">
+                <div style="visibility: hidden;">
+
+                </div>
+            </div>
+            <div class="esri-ui" style="inset: 0px;">
+                <div class="esri-ui-inner-container esri-ui-corner-container" style="inset: 15px 15px 30px;">
+                    <div class="esri-ui-top-left esri-ui-corner">
+                        <div class="esri-component esri-zoom esri-widget">
+                            <div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0"
+                                title="Zoom in">
+                                <span aria-hidden="true" role="presentation" class="esri-icon esri-icon-plus"></span>
+                                <span class="esri-icon-font-fallback-text">Zoom in</span>
+                            </div>
+                            <div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0"
+                                title="Zoom out">
+                                <span aria-hidden="true" role="presentation" class="esri-icon esri-icon-minus">
+
+                                </span>
+                                <span class="esri-icon-font-fallback-text">Zoom out</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="esri-ui-top-right esri-ui-corner"></div>
+                    <div class="esri-ui-bottom-left esri-ui-corner"></div>
+                    <div class="esri-ui-bottom-right esri-ui-corner"></div>
+                </div>
+                <div class="esri-ui-inner-container esri-ui-manual-container">
+                    <div class="esri-component esri-attribution esri-widget">
+                        <div class="esri-attribution__sources esri-interactive" tabindex="0" role="button">Esri, NASA,
+                            NGA, USGS | Esri Community Maps Contributors, Esri, HERE, Garmin, METI/NASA, USGS</div>
+                        <div class="esri-attribution__powered-by">Powered by <a
+                                class="esri-attribution__link esri-widget__anchor" href="http://www.esri.com/"
+                                target="_blank" rel="noreferrer">Esri</a></div>
+                    </div>
+                    <div class="esri-component esri-popup" role="presentation"></div>
+                    <div class="esri-component esri-spinner"></div>
+                </div>
+            </div>
+        </div>
+        <div class="esri-view-user-storage"></div>
+    </div>
+</div>
+
+<script>
+    require(["esri/Map", "esri/views/MapView"], (Map, MapView) => {
+      const map = new Map({
+        basemap: "topo-vector"
+      });
+      const view = new MapView({
+        container: "viewDiv", // Reference to the view div created in step 5
+        map: map, // Reference to the map object created before the view
+        zoom: 9, // Sets zoom level based on level of detail (LOD)
+        center: [106, 10] // Sets center point of view using longitude,latitude
+      });
+    });
+  </script>
