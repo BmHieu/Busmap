@@ -66,15 +66,26 @@
 </div>
 
 <script>
-    require(["esri/Map", "esri/views/MapView"], (Map, MapView) => {
+    require([
+     "esri/config",
+      "esri/Map",
+      "esri/views/MapView"
+    ], function (esriConfig,Map, MapView) {
+
+      esriConfig.apiKey = "AAPK25279516f4f14bf281c511fe3e4b20edEO2GLVxxSx1dDem5g2aaJQQk_5jFEG9c8zmv0A7erp-lqgrvwHFUg66l8EQiQj-X";
       const map = new Map({
-        basemap: "topo-vector"
+        basemap: "arcgis-topographic" // Basemap layer
       });
+
       const view = new MapView({
-        container: "viewDiv", // Reference to the view div created in step 5
-        map: map, // Reference to the map object created before the view
-        zoom: 6, // Sets zoom level based on level of detail (LOD)
-        center: [106, 10] // Sets center point of view using longitude,latitude
+        map: map,
+        center: [-118.805, 34.027],
+        zoom: 13, // scale: 72223.819286
+        container: "viewDiv",
+        constraints: {
+          snapToZoom: false
+        }
       });
+
     });
   </script>
