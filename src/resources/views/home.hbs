@@ -82,71 +82,11 @@
             basemap: "arcgis-navigation"
         });
         const view = new MapView({
-            container: "viewDiv", // Reference to the view div created in step 5
-            map: map, // Reference to the map object created before the view
-            zoom: 12, // Sets zoom level based on level of detail (LOD)
-            center: [106.75, 10.83] // Sets center point of view using longitude,latitude
+            container: "viewDiv",
+            map: map, 
+            zoom: 12, 
+            center: [106.75, 10.83]
         });
 
-        const places = ["Chọn 1 tuyến xe để xem", "Tuyến số 8", "Tuyến số 33", "Tuyến số 50", "Tuyến số 52", "Tuyến số 99"];
-
-        const select = document.createElement("select", "");
-        select.setAttribute("class", "esri-widget esri-select");
-        select.setAttribute("style", "width: 175px; font-family: 'Avenir Next W00'; font-size: 1em");
-
-        places.forEach(function (p) {
-            const option = document.createElement("option");
-            option.value = p;
-            option.innerHTML = p;
-            select.appendChild(option);
-        });
-        view.ui.add(select, "top-right");
-
-        const locatorUrl = "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-        
-        /* function findPlaces(category, pt) {
-            locator.addressToLocations(locatorUrl, {
-                location: pt,
-                categories: [category],
-                maxLocations: 25,
-                outFields: ["Place_addr", "PlaceName"]
-            })
-                .then(function (results) {
-                    view.popup.close();
-                    view.graphics.removeAll();
-
-                    results.forEach(function (result) {
-                        view.graphics.add(
-                            new Graphic({
-                                attributes: result.attributes,  // Data attributes returned
-                                geometry: result.location, // Point returned
-                                symbol: {
-                                    type: "simple-marker",
-                                    color: "#000000",
-                                    size: "12px",
-                                    outline: {
-                                        color: "#ffffff",
-                                        width: "2px"
-                                    }
-                                },
-
-                                popupTemplate: {
-                                    title: "{PlaceName}", // Data attribute names
-                                    content: "{Place_addr}"
-                                }
-                            }));
-                    });
-                });
-
-        }
-        view.watch("stationary", function (val) {
-            if (val) {
-                findPlaces(select.value, view.center);
-            }
-        });
-
-        select.addEventListener('change', function (event) {
-            findPlaces(event.target.value, view.center);
-        });*/
     });
 </script>

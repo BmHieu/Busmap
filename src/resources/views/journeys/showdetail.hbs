@@ -70,21 +70,18 @@
      "esri/config",
       "esri/Map",
       "esri/views/MapView"
-    ], function (esriConfig,Map, MapView) {
+    ], function (esriConfig, Map, MapView) {
 
       esriConfig.apiKey = "AAPK25279516f4f14bf281c511fe3e4b20edEO2GLVxxSx1dDem5g2aaJQQk_5jFEG9c8zmv0A7erp-lqgrvwHFUg66l8EQiQj-X";
       const map = new Map({
-        basemap: "arcgis-topographic" // Basemap layer
+        basemap: "arcgis-navigation" // Basemap layer
       });
 
       const view = new MapView({
         map: map,
         center: [-118.805, 34.027],
-        zoom: 13, // scale: 72223.819286
-        container: "viewDiv",
-        constraints: {
-          snapToZoom: false
-        }
+        zoom: 13,
+        container: "viewDiv"
       });
 
     });
