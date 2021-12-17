@@ -16,7 +16,17 @@ app.use(morgan('combined'))
 //use CSS
 app.use(express.static(path.join(__dirname,'public')))
 
-app.engine('hbs', exphbs.engine({extname: '.hbs'}));
+app.use(express.urlencoded({
+  extended: true
+}))
+app.use(express.json())
+
+app.engine('hbs', exphbs.engine({
+  extname: '.hbs',
+  helpers: {
+    sum: (a,b) => a + b,
+  }
+}));
 
 app.set('view engine', 'hbs')
 app.set('views',path.join(__dirname,'resources','views'))

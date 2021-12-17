@@ -16,16 +16,22 @@ body{
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 20px; }
 
-.scrollbar{
-  height: 600px;
+.joyrney-scrollbar-home{
+  height: 95%;
   width: 30%;
+}
+
+.scrollbar{
+  height: 100%;
+  width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #f7f7f7;
 }
 
-.card-link{
+.card-link-home{
   text-decoration: none;
+  color: #3ebd3e;
 }
 
 .card-text{
@@ -40,4 +46,49 @@ body{
 
 .title-style{
   color: blue;
+  font-size: 30px;
+}
+
+.card-link{
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.card-link-item, .card-link-item a{
+  width: 100%;
+}
+
+.card-text{
+  text-decoration: none;
+}
+
+point:hover {
+  Color: blue;
+  
+}
+
+.mainform{
+  display: flex;
+  width: 100%; 
+  height: 100%;
+}
+
+.forminfor{
+  width: 40%;
+  height: 80%;
+  margin-right: 50px;
+  margin-bottom: 30px;
+}
+
+.form-group{
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+
+.containerbutton{
+  display: flex;
+  justify-content: space-between;
 }

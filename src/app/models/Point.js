@@ -5,11 +5,11 @@ const AutoIncrement = require('mongoose-sequence')(mongoose)
 const Schema = mongoose.Schema
 
 const Point = new Schema({
-    _id: {type: Number, required: true},
     name: { type: String, required: true ,maxLength: 255 },
-    description: { type: String, maxLength: 600  },
-    fisrt_last: { type: String, maxLength: 600  },
-    time: { type: String, maxLength: 600  },
+    latitude: { type: String, maxLength: 600  },
+    longitude: { type: String, maxLength: 600  },
+    routes: { type: String, maxLength: 600  },
+    journeyslug: { type: String, maxLength: 600  },
   }, {
     //_id: false,
     timestamps: true
