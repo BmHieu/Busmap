@@ -129,11 +129,13 @@
                 width: 1
             }
         }
-        const point = { //Create a point
-            type: "point",
-            longitude: -118.80657463861,
-            latitude: 34.0005930608889
+
+        const lineSymbol = {
+            type: "simple-line",
+            color: [226, 119, 40],
+            width: 6
         };
+
         var arrayPaths = []
         view.on("click", function (event) {
             view.hitTest(event).then(function (hitTestResults) { // Search for features where the user clicked
@@ -141,13 +143,61 @@
                     let xlongitude = event.mapPoint.longitude;
                     let ylatitude = event.mapPoint.latitude;
                     arrayPaths.push([xlongitude, ylatitude]);
-                    _paths.innerHTML = arrayPaths;
+                    let stringpaths = "";
+                    graphicsLayer.removeAll();
+                    arrayPaths.forEach(path => {
+                        if (stringpaths != null) {
+                            stringpaths += path + ",\
+                        ";
+                            graphicsLayer.add(new Graphic({ // Data attributes returned
+                                geometry: {
+                                    type: "point",
+                                    longitude: path[0],
+                                    latitude: path[1]
+                                }, // Point returned
+                                symbol: simpleMarkerSymbol
+                            }));
+                        }
+                    })
+                    graphicsLayer.add(new Graphic({
+                        geometry: {
+                            type: "polyline",
+                            paths: [arrayPaths]
+                        },
+                        symbol: lineSymbol
+                    }))
+                    _paths.innerHTML = stringpaths;
                 }
             });
         })
         btnRemovePoint.addEventListener("click", function () {
-            arrayPaths.pop()
-            _paths.innerHTML = arrayPaths;
+            if (arrayPaths != null) {
+                arrayPaths.pop()
+                let stringpaths = "";
+                graphicsLayer.removeAll();
+                arrayPaths.forEach(path => {
+                    if (stringpaths != null) {
+                        stringpaths += path + ",\
+                        ";
+                        graphicsLayer.add(new Graphic({ // Data attributes returned
+                            geometry: {
+                                type: "point",
+                                longitude: path[0],
+                                latitude: path[1]
+                            }, // Point returned
+                            symbol: simpleMarkerSymbol
+                        }));
+                    }
+                })
+                graphicsLayer.add(new Graphic({
+                    geometry: {
+                        type: "polyline",
+                        paths: [arrayPaths]
+                    },
+                    symbol: lineSymbol
+                }))
+                _paths.innerHTML = stringpaths;
+            }
 
         })
 

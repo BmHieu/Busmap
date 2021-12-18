@@ -119,11 +119,11 @@
         var turnJourney = document.getElementById("TurnJourney");
         var virtualPoint = document.getElementsByTagName("point")
 
-        var _DataArrayConverted = [];
         var _DataZoomFirstPoint = [];
         var _DataZoomLastPoint = [];
-        var arrayPoint = []
+        var arrayPoint = [];
 
+        var _DataArrayConverted = [];
         function SovlePaths() {
             const _Regex = /[\[\] ,\n]+/g;
             var _DataArray = journeyPaths.split(_Regex);
@@ -261,6 +261,7 @@
             "height": "40px"
         };
 
+        ///// loadview all point
         arrayPoint.forEach(pointInfo => {
 
             let point = new Graphic({
@@ -367,43 +368,44 @@
                     arrayPointTemp[idPoint - 1] = arrayPoint[indexOfPoint];
                     indexOfPoint--;
                     idPoint++;;
-                    
+
                 }
                 arrayPoint = arrayPointTemp;
 
             }
         });
-       
+
         for (let i = 0; i < virtualPoint.length; i++) {
             virtualPoint[i].addEventListener("click", function (e) {
                 let idPoint = virtualPoint[i].getAttribute("value") - 1;
-                let point = [arrayPoint[idPoint].longitude,arrayPoint[idPoint].latitude]
+                let point = [arrayPoint[idPoint].longitude, arrayPoint[idPoint].latitude]
                 view.center = point;
             })
         }
 
         const track = new Track({
-          view: view,
-          graphic: new Graphic({
-            symbol: {
-              type: "simple-marker",
-              size: "12px",
-              color: "green",
-              outline: {
-                color: "#efefef",
-                width: "1.5px"
-              }
-            }
-          }),
-          useHeadingEnabled: false
+            view: view,
+            graphic: new Graphic({
+                symbol: {
+                    type: "simple-marker",
+                    size: "12px",
+                    color: "green",
+                    outline: {
+                        color: "#efefef",
+                        width: "1.5px"
+                    }
+                }
+            }),
+            useHeadingEnabled: false
         });
         view.ui.add(track, "top-left");
 
         const search = new Search({
-          //Add Search widget
-          view: view
+            //Add Search widget
+            view: view
         });
 
         view.ui.add(search, "top-right");
+
     });
 </script>
