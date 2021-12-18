@@ -1,0 +1,495 @@
+<div class="homeapp">
+
+    <div class="card mb-3" style="width: 30%;">
+        <div class="row g-0">
+            <div class="col-md-12">
+                <div class="card-body">
+                    <h5 class="card-title title-style" id="JourneyName" value="{{journey.name}}">{{journey.name}}</h5>
+                    <div class="card-link">
+                        <div class="card-link-item">
+                            <a href="#" id="TurnJourney" class="btn btn-success" active="true">Xem lượt đi</a>
+                        </div>
+                        <div class="card-link-item">
+                            <!--<a href="/journeys/{{journey.slug}}/return" class="btn btn-light">Xem lượt về</a>-->
+                            <a href="#" id="ReturnJourney" class="btn btn-light ">Xem lượt về</a>
+                        </div>
+                    </div>
+                    <p class="card-text header" id="JourneyFirstLast" value="{{journey.first_last}}"><b>Tên tuyến</b>
+                        {{journey.first_last}}</p>
+                    <p class="card-text" id="JourneyCategory" value="{{journey.category}}"><b>Loại tuyến</b>
+                        {{journey.category}}</p>
+                    <p class="card-text" id="JourneyPriceticket" value="{{journey.priceticket}}"><b>Giá vé</b>
+                        {{journey.priceticket}} VND</p>
+                    <p class="card-text" id="JourneyLength" value="{{journey.length}}"><b>Độ dài tuyến</b>
+                        {{journey.length}} km</p>
+                    <p class="card-text" id="JourneyTime" value="{{journey.time}}"><b>Thời gian chạy:</b>
+                        {{journey.time}}</p>
+                    <div id="JourneyPaths" value="{{journey.paths}}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="scrollbar" id="ListPoint">
+            <div class="card-body" id="VirtualPoint">
+                {{#each points}}
+                <p class=card-text>
+                    <point type="button" class="card-text" id="PointID{{sum @index 1}}" value="{{sum @index 1}}">
+                        {{this.name}}</point>
+                </p>
+                <div id="PointName{{sum @index 1}}" value="{{this.name}}"></div>
+                <div id="PointLatitude{{sum @index 1}}" value="{{this.latitude}}"></div>
+                <div id="PointLongitude{{sum @index 1}}" value="{{this.longitude}}"></div>
+                <div id="PointRoutes{{sum @index 1}}" value="{{this.routes}}"></div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div style="width:70%; height: 90%" id="viewDiv"
+        class="esri-view esri-view-height-xsmall esri-view-height-less-than-small esri-view-height-less-than-medium esri-view-height-less-than-large esri-view-height-less-than-xlarge esri-view-orientation-landscape esri-view-width-xsmall esri-view-width-less-than-small esri-view-width-less-than-medium esri-view-width-less-than-large esri-view-width-less-than-xlarge">
+        <div class="esri-view-root">
+            <div class="esri-view-surface esri-view-surface--touch-none" role="application" tabindex="0">
+                <canvas style="width: 478px; height: 450px; display: block;" width="478" height="450">
+                </canvas>
+            </div>
+            <div class="esri-overlay-surface">
+                <div style="visibility: hidden;">
+
+                </div>
+            </div>
+            <div class="esri-ui" style="inset: 0px;">
+                <div class="esri-ui-inner-container esri-ui-corner-container" style="inset: 15px 15px 30px;">
+                    <div class="esri-ui-top-left esri-ui-corner">
+                        <div class="esri-component esri-zoom esri-widget">
+                            <div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0"
+                                title="Zoom in">
+                                <span aria-hidden="true" role="presentation" class="esri-icon esri-icon-plus"></span>
+                                <span class="esri-icon-font-fallback-text">Zoom in</span>
+                            </div>
+                            <div class="esri-widget--button esri-widget esri-interactive" role="button" tabindex="0"
+                                title="Zoom out">
+                                <span aria-hidden="true" role="presentation" class="esri-icon esri-icon-minus">
+
+                                </span>
+                                <span class="esri-icon-font-fallback-text">Zoom out</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="esri-ui-top-right esri-ui-corner"></div>
+                    <div class="esri-ui-bottom-left esri-ui-corner"></div>
+                    <div class="esri-ui-bottom-right esri-ui-corner"></div>
+                </div>
+                <div class="esri-ui-inner-container esri-ui-manual-container">
+                    <div class="esri-component esri-attribution esri-widget">
+                        <div class="esri-attribution__sources esri-interactive" tabindex="0" role="button">Esri, NASA,
+                            NGA, USGS | Esri Community Maps Contributors, Esri, HERE, Garmin, METI/NASA, USGS</div>
+                        <div class="esri-attribution__powered-by">Powered by <a
+                                class="esri-attribution__link esri-widget__anchor" href="http://www.esri.com/"
+                                target="_blank" rel="noreferrer">Esri</a></div>
+                    </div>
+                    <div class="esri-component esri-popup" role="presentation"></div>
+                    <div class="esri-component esri-spinner"></div>
+                </div>
+            </div>
+        </div>
+        <div class="esri-view-user-storage"></div>
+    </div>
+</div>
+
+<script>
+    require([
+        "esri/config",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/rest/locator",
+        "esri/widgets/Track",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer",
+        "esri/widgets/Search"
+    ], (esriConfig, Map, MapView, locator, Track, Graphic, GraphicsLayer, Search) => {
+
+        esriConfig.apiKey = "AAPK1abceff074ac40efb53ec5b42a3eabf7h9BXaNUytC9SkeUdeDI6fVD4r_h2Hd5ZBwmtkd9B3AGk50DISEoXs4iYLxGCiVP8";
+
+        var journeyFirstLast = document.getElementById("JourneyFirstLast").getAttribute('value');
+        var journeyCategory = document.getElementById("JourneyCategory").getAttribute('value');
+        var journeyName = document.getElementById("JourneyName").getAttribute('value');
+        var journeyPriceticket = document.getElementById("JourneyPriceticket").getAttribute('value');
+        var journeyLength = document.getElementById("JourneyLength").getAttribute('value');
+        var journeyTime = document.getElementById("JourneyTime").getAttribute('value');
+        var journeyPaths = document.getElementById("JourneyPaths").getAttribute('value');
+        var returnJourney = document.getElementById("ReturnJourney");
+        var turnJourney = document.getElementById("TurnJourney");
+        var virtualPoint = document.getElementsByTagName("point")
+
+        var _DataArrayConverted = [];
+        var _DataZoomFirstPoint = [];
+        var _DataZoomLastPoint = [];
+        var arrayPoint = []
+
+        function SovlePaths() {
+            const _Regex = /[\[\] ,\n]+/g;
+            var _DataArray = journeyPaths.split(_Regex);
+
+            //convert string data to array
+            for (let i = 0; i < _DataArray.length; i++) {
+                var _ArrayTemp = [];
+                if (_DataArray[i] != []) {
+                    _ArrayTemp.push(_DataArray[i]);
+                    i++;
+                    _ArrayTemp.push(_DataArray[i]);
+                    _DataArrayConverted.push(_ArrayTemp)
+                    
+                }
+            }
+
+            var _DataZoomTemp = _DataArrayConverted[0];
+            var _ZoomX = _DataZoomTemp[0].slice(0, 10);
+            var _ZoomY = _DataZoomTemp[1].slice(0, 10);
+            _DataZoomFirstPoint.push(_ZoomX);
+            _DataZoomFirstPoint.push(_ZoomY);
+
+            _DataZoomTemp = _DataArrayConverted[_DataArrayConverted.length - 1]
+            _ZoomX = _DataZoomTemp[0].slice(0, 10);
+            _ZoomY = _DataZoomTemp[1].slice(0, 10);
+            _DataZoomLastPoint.push(_ZoomX);
+            _DataZoomLastPoint.push(_ZoomY);
+        }
+
+        SovlePaths();
+
+        function GetAllPoint() {
+
+            let indexOfPoint = 1;
+            while (document.getElementById("PointName" + indexOfPoint) != null) {
+                var pointName = document.getElementById("PointName" + indexOfPoint).getAttribute("value");
+                var pointLatitude = document.getElementById("PointLatitude" + indexOfPoint).getAttribute("value");
+                var pointLongitude = document.getElementById("PointLongitude" + indexOfPoint).getAttribute("value");
+                var pointRoutes = document.getElementById("PointRoutes" + indexOfPoint).getAttribute("value");
+
+                let pointTemp = {
+                    name: pointName,
+                    latitude: pointLatitude,
+                    longitude: pointLongitude,
+                    routes: pointRoutes
+                }
+
+                arrayPoint.push(pointTemp);
+                indexOfPoint++;
+            }
+
+        }
+
+        GetAllPoint();
+
+        const map = new Map({
+            basemap: "arcgis-navigation" // Basemap layer
+        });
+
+        const view = new MapView({
+            map: map,
+            center: _DataZoomFirstPoint,
+            zoom: 11,
+            container: "viewDiv"
+        });
+
+        const graphicsLayer = new GraphicsLayer();
+
+        const lineSymbol = {
+            type: "simple-line",
+            color: [91, 79, 227],
+            width: 6
+        };
+
+        const popupTemplate = {
+            title: "{Name}",
+            content: [
+                {
+                    type: "fields",
+                    fieldInfos: [
+                        {
+                            fieldName: "Name",
+                            label: "Tuyến xe"
+                        },
+                        {
+                            fieldName: "NameJourney",
+                            label: "Tuyến đường"
+                        },
+                        {
+                            fieldName: "PriceTickets",
+                            label: "Giá vé (VND)"
+                        },
+                        {
+                            fieldName: "Length",
+                            label: "Độ dài tuyến (km)"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const polyline = {
+            type: "polyline",
+            paths: [_DataArrayConverted],
+        };
+
+        const lineAtt = {
+            Name: journeyName,
+            NameJourney: journeyFirstLast,
+            PriceTickets: journeyPriceticket,
+            Length: journeyLength
+        };
+
+        var polylineGraphic = new Graphic({
+            geometry: polyline,
+            symbol: lineSymbol,
+            attributes: lineAtt,
+            popupTemplate: popupTemplate
+        });
+
+
+        graphicsLayer.add(polylineGraphic);
+        map.add(graphicsLayer);
+
+        //////////////////////////////////load point when start page////////////////////////////////
+
+        var point_template = {
+            "title": "{Name}",
+            "content": "Các tuyến: <b>{Routes}</b>."
+        };
+
+        var point_bus_template = {
+            "type": "picture-marker",
+            "url": "https://i.imgur.com/oCcNTGY.png",
+            "width": "30px",
+            "height": "30px"
+        };
+
+        var point_bus_current = {
+            "type": "picture-marker",
+            "url": "https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/24/000000/external-geometric-circle-dot-shape-with-ring-pattern-basic-shadow-tal-revivo.png",
+            "width": "10px",
+            "height": "10px"
+        }
+
+        arrayPoint.forEach(pointInfo => {
+
+            let point = new Graphic({
+                symbol: point_bus_template,
+                geometry: {
+                    type: "point",
+                    latitude: pointInfo.latitude,
+                    longitude: pointInfo.longitude,
+                },
+                attributes: {
+                    Name: pointInfo.name,
+                    Routes: pointInfo.routes
+                },
+                popupTemplate: point_template
+            })
+            
+            view.graphics.add(point);
+
+        })
+
+        let i = 0;
+        console.log(view.graphics);
+        setInterval(() => {
+            
+            if(i > _DataArrayConverted.length - 1) {
+                let lastPoint = new Graphic({
+                symbol: point_bus_current,
+                geometry: {
+                    type: "point",
+                    latitude: _DataArrayConverted[_DataArrayConverted.length - 1][1],
+                    longitude: _DataArrayConverted[_DataArrayConverted.length - 1][0],
+                },
+                attributes: {
+                    Name: "",
+                    Routes: ""
+                },
+                popupTemplate: point_template
+            })
+            clearInterval();
+            //i = 0;
+            };
+            let point = new Graphic({
+                symbol: point_bus_current,
+                geometry: {
+                    type: "point",
+                    latitude: _DataArrayConverted[i][1],
+                    longitude: _DataArrayConverted[i][0],
+                },
+                attributes: {
+                    Name: "",
+                    Routes: ""
+                },
+                popupTemplate: point_template
+            })
+            if(i > 0) {
+                let lastPoint = new Graphic({
+                symbol: point_bus_current,
+                geometry: {
+                    type: "point",
+                    latitude: _DataArrayConverted[i - 1][1],
+                    longitude: _DataArrayConverted[i - 1][0],
+                },
+                attributes: {
+                    Name: "",
+                    Routes: ""
+                },
+                popupTemplate: point_template
+            })
+            view.graphics.remove(lastPoint);
+            }
+            
+            view.graphics.add(point);
+            i++;
+            
+        }, 100)
+        
+
+        /*_DataArrayConverted.forEach(pointInfo => {
+
+            let point = new Graphic({
+                symbol: point_bus_template,
+                geometry: {
+                    type: "point",
+                    latitude: pointInfo[1],
+                    longitude: pointInfo[0],
+                },
+                attributes: {
+                    Name: "",
+                    Routes: ""
+                },
+                popupTemplate: point_template
+            })
+            console.log(pointInfo);
+            view.graphics.add(point);
+
+        })*/journeyFirstLast
+
+        // show return journey
+        returnJourney.addEventListener("click", function () {
+            //map.remove(graphicsLayer);
+            //graphicsLayer.remove(polylineGraphic);
+            if (!returnJourney.hasAttribute("active")) {
+                returnJourney.setAttribute("class", "btn btn-success");
+                turnJourney.setAttribute("class", "btn btn-light");
+
+                let pt = _DataZoomLastPoint;
+                //let colorTemp = [50, 153, 168];
+                let colorTemp = [240, 22, 22];
+                view.center = pt;
+                lineSymbol.color = colorTemp;
+
+                polylineGraphic = new Graphic({
+                    geometry: polyline,
+                    symbol: lineSymbol,
+                    attributes: lineAtt,
+                    popupTemplate: popupTemplate
+                });
+                graphicsLayer.add(polylineGraphic);
+
+                returnJourney.setAttribute("active", "true");
+                if (turnJourney.hasAttribute("active")) {
+                    turnJourney.removeAttribute("active");
+                }
+
+                let indexOfPoint = arrayPoint.length - 1;
+                let idPoint = 1;
+                let arrayPointTemp = [];
+                while (document.getElementById("PointID" + idPoint) != null) {
+                    document.getElementById("PointName" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].name);
+                    document.getElementById("PointLatitude" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].latitude);
+                    document.getElementById("PointLongitude" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].longitude);
+                    document.getElementById("PointRoutes" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].routes);
+
+                    document.getElementById("PointID" + idPoint).innerHTML = arrayPoint[indexOfPoint].name;
+                    arrayPointTemp[idPoint - 1] = arrayPoint[indexOfPoint];
+
+                    indexOfPoint--;
+                    idPoint++;
+                }
+                arrayPoint = arrayPointTemp;
+
+            }
+
+        });
+
+        // show turn journey
+        turnJourney.addEventListener("click", function () {
+            if (!turnJourney.hasAttribute("active")) {
+                graphicsLayer.removeAll();
+
+                returnJourney.setAttribute("class", "btn btn-light");
+                turnJourney.setAttribute("class", "btn btn-success");
+
+                let point = _DataZoomFirstPoint;
+                let colorTemp = [91, 79, 227];
+                view.center = point;
+                lineSymbol.color = colorTemp;
+
+                polylineGraphic = new Graphic({
+                    geometry: polyline,
+                    symbol: lineSymbol,
+                    attributes: lineAtt,
+                    popupTemplate: popupTemplate
+                });
+                graphicsLayer.add(polylineGraphic);
+                turnJourney.setAttribute("active", "true");
+                if (returnJourney.hasAttribute("active")) {
+                    returnJourney.removeAttribute("active");
+                }
+
+                let indexOfPoint = arrayPoint.length - 1;
+                let idPoint = 1;
+                let arrayPointTemp = [];
+                while (document.getElementById("PointID" + idPoint) != null) {
+                    document.getElementById("PointName" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].name);
+                    document.getElementById("PointLatitude" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].latitude);
+                    document.getElementById("PointLongitude" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].longitude);
+                    document.getElementById("PointRoutes" + idPoint).setAttribute("value", arrayPoint[indexOfPoint].routes);
+
+                    document.getElementById("PointID" + idPoint).innerHTML = arrayPoint[indexOfPoint].name;
+
+                    arrayPointTemp[idPoint - 1] = arrayPoint[indexOfPoint];
+                    indexOfPoint--;
+                    idPoint++;;
+                    
+                }
+                arrayPoint = arrayPointTemp;
+
+            }
+        });
+       
+        for (let i = 0; i < virtualPoint.length; i++) {
+            virtualPoint[i].addEventListener("click", function (e) {
+                let idPoint = virtualPoint[i].getAttribute("value") - 1;
+                let point = [arrayPoint[idPoint].longitude,arrayPoint[idPoint].latitude]
+                view.center = point;
+            })
+        }
+
+        const track = new Track({
+          view: view,
+          graphic: new Graphic({
+            symbol: {
+              type: "simple-marker",
+              size: "12px",
+              color: "green",
+              outline: {
+                color: "#efefef",
+                width: "1.5px"
+              }
+            }
+          }),
+          useHeadingEnabled: false
+        });
+        view.ui.add(track, "top-left");
+
+        const search = new Search({
+          //Add Search widget
+          view: view
+        });
+
+        view.ui.add(search, "top-right");
+    });
+</script>
