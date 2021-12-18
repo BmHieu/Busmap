@@ -15,24 +15,31 @@ class JourneyController {
         //res.json(req.body)
         const small = new Journey(req.body);
         small.save();
-
-        res.render('home');
+        res.redirect('home');
     }
 
     //[GET] /journeys/:slug
     showdetail(req, res, next) {
-        
-        Promise.all([Journey.findOne({ slug: req.params.slug }), Point.find({journeyslug: req.params.slug})])
-        .then(([journey, points]) => res.render('journeys/showdetail', {
-            journey: mongooseToObject(journey),
-            points: mutipleMongooseToObject(points)
-        }))
-        .catch(next);
+
+        Promise.all([Journey.findOne({ slug: req.params.slug }), Point.find({ journeyslug: req.params.slug })])
+            .then(([journey, points]) => res.render('journeys/showdetail', {
+                journey: mongooseToObject(journey),
+                points: mutipleMongooseToObject(points)
+            }))
+            .catch(next);
 
         /*
         Journey.findOne({ slug: req.params.slug })
             .then(journey => res.render('journeys/showdetail', { journey: mongooseToObject(journey) }))
             .catch(next)*/
+    }
+
+    manage(req, res, next) {
+        Journey.find()
+            .then(journeys => res.render('journeys/manage', {
+                journeys: mutipleMongooseToObject(journeys)
+            }))
+            .catch(next)
     }
 
 }
