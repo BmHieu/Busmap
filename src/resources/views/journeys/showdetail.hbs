@@ -308,6 +308,7 @@
                 pointLayer.removeAll();
                 i = 0;
             };
+
             let point = new Graphic({
                 symbol: point_bus_current,
                 geometry: {
@@ -317,15 +318,7 @@
                 }
             })
             if (i > 0) {
-                let lastPoint = new Graphic({
-                    symbol: point_bus_current,
-                    geometry: {
-                        type: "point",
-                        latitude: _DataArrayConverted[i - 1][1],
-                        longitude: _DataArrayConverted[i - 1][0],
-                    }
-                })
-                pointLayer.remove(lastPoint);
+                pointLayer.removeAll();
             }
 
             pointLayer.add(point);
