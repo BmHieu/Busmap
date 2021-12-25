@@ -2,10 +2,18 @@
     <div class="joyrney-scrollbar-home">
         <div class="scrollbar">
             {{#each journeys}}
-            <div class="card mb-3" style="max-width: 400px;">
+            <div class="card mb-3" style="max-width: 400px; margin: 10px">
                 <a class="card-link-home" href="/journeys/{{this.slug}}">
                     <div class="row g-0">
-                        <div class="col-md-12">
+                        <div class="col-md-1">
+                            <img
+                                src="https://img.icons8.com/external-prettycons-flat-prettycons/50/000000/external-bus-car-parts-vehicles-prettycons-flat-prettycons.png"
+                                height="30"
+                                alt="BusLogo"
+                                loading="lazy"
+                                style="margin: 10px;">
+                        </div>
+                        <div class="col-md-11">
                             <div class="card-body">
                                 <h5 class="card-title" id="line{{sum @index 1}}" value="{{this.paths}}">{{this.name}}
                                 </h5>

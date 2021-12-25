@@ -2,7 +2,7 @@ body{
   overflow: hidden;
 }
 .navbar-header {
-  background-color: #212529 !important; }
+  background-color: #87CEFA !important; }
 .grid-container {
   display: grid;
   grid-column-gap: 20px;
@@ -31,7 +31,7 @@ body{
 
 .card-link-home{
   text-decoration: none;
-  color: #3ebd3e;
+  color: #37b1d6;
 }
 
 .card-text{
