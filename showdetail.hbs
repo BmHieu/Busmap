@@ -4,14 +4,14 @@
         <div class="row g-0">
             <div class="col-md-12">
                 <div class="card-body">
-                    <h5 class="card-title title-style" id="JourneyName" value="{{journey.name}}">{{journey.name}}</h5>
+                    <h5 class="card-title title-style" style="text-align: center; color: black; font-weight:bold; font-size: 30px;" id="JourneyName" value="{{journey.name}}">{{journey.name}}</h5>
                     <div class="card-link">
                         <div class="card-link-item">
-                            <a href="#" id="TurnJourney" class="btn btn-success" active="true">Xem lượt đi</a>
+                            <a href="#" id="TurnJourney" class="btn btn-success" style="background: #87CEFA; font-size: 16px; font-weight: bold;border: 1px solid #87CEFA;" active="true">Xem lượt đi</a>
                         </div>
                         <div class="card-link-item">
                             <!--<a href="/journeys/{{journey.slug}}/return" class="btn btn-light">Xem lượt về</a>-->
-                            <a href="#" id="ReturnJourney" class="btn btn-light ">Xem lượt về</a>
+                            <a href="#" id="ReturnJourney" class="btn btn-light " style="border: 1px solid #87CEFA; font-size:16px; font-weight: bold" >Xem lượt về</a>
                         </div>
                     </div>
                     <p class="card-text header" id="JourneyFirstLast" value="{{journey.first_last}}"><b>Tên tuyến</b>
@@ -119,11 +119,11 @@
         var turnJourney = document.getElementById("TurnJourney");
         var virtualPoint = document.getElementsByTagName("point")
 
-        var _DataArrayConverted = [];
         var _DataZoomFirstPoint = [];
         var _DataZoomLastPoint = [];
-        var arrayPoint = []
+        var arrayPoint = [];
 
+        var _DataArrayConverted = [];
         function SovlePaths() {
             const _Regex = /[\[\] ,\n]+/g;
             var _DataArray = journeyPaths.split(_Regex);
@@ -136,7 +136,6 @@
                     i++;
                     _ArrayTemp.push(_DataArray[i]);
                     _DataArrayConverted.push(_ArrayTemp)
-                    
                 }
             }
 
@@ -186,12 +185,13 @@
         const view = new MapView({
             map: map,
             center: _DataZoomFirstPoint,
-            zoom: 11,
+            zoom: 16,
             container: "viewDiv"
         });
 
         const graphicsLayer = new GraphicsLayer();
-
+        const pointLayer = new GraphicsLayer();
+        const pointBusLayer = new GraphicsLayer();
         const lineSymbol = {
             type: "simple-line",
             color: [91, 79, 227],
@@ -247,6 +247,8 @@
 
         graphicsLayer.add(polylineGraphic);
         map.add(graphicsLayer);
+        map.add(pointBusLayer);
+        map.add(pointLayer);
 
         //////////////////////////////////load point when start page////////////////////////////////
 
@@ -258,8 +260,8 @@
         var point_bus_template = {
             "type": "picture-marker",
             "url": "https://i.imgur.com/oCcNTGY.png",
-            "width": "30px",
-            "height": "30px"
+            "width": "40px",
+            "height": "40px"
         };
 
         var point_bus_current = {
@@ -269,6 +271,7 @@
             "height": "10px"
         }
 
+        ///// loadview all point
         arrayPoint.forEach(pointInfo => {
 
             let point = new Graphic({
@@ -284,67 +287,45 @@
                 },
                 popupTemplate: point_template
             })
-            
-            view.graphics.add(point);
+           pointBusLayer.add(point);
 
         })
 
         let i = 0;
-        console.log(view.graphics);
+        //console.log(view.graphics);
         setInterval(() => {
-            
-            if(i > _DataArrayConverted.length - 1) {
+
+            if (i > _DataArrayConverted.length - 1) {
                 let lastPoint = new Graphic({
-                symbol: point_bus_current,
-                geometry: {
-                    type: "point",
-                    latitude: _DataArrayConverted[_DataArrayConverted.length - 1][1],
-                    longitude: _DataArrayConverted[_DataArrayConverted.length - 1][0],
-                },
-                attributes: {
-                    Name: "",
-                    Routes: ""
-                },
-                popupTemplate: point_template
-            })
-            clearInterval();
-            //i = 0;
+                    symbol: point_bus_current,
+                    geometry: {
+                        type: "point",
+                        latitude: _DataArrayConverted[_DataArrayConverted.length - 1][1],
+                        longitude: _DataArrayConverted[_DataArrayConverted.length - 1][0],
+                    }
+                })
+                //clearInterval();
+                pointLayer.removeAll();
+                i = 0;
             };
+
             let point = new Graphic({
                 symbol: point_bus_current,
                 geometry: {
                     type: "point",
                     latitude: _DataArrayConverted[i][1],
                     longitude: _DataArrayConverted[i][0],
-                },
-                attributes: {
-                    Name: "",
-                    Routes: ""
-                },
-                popupTemplate: point_template
+                }
             })
-            if(i > 0) {
-                let lastPoint = new Graphic({
-                symbol: point_bus_current,
-                geometry: {
-                    type: "point",
-                    latitude: _DataArrayConverted[i - 1][1],
-                    longitude: _DataArrayConverted[i - 1][0],
-                },
-                attributes: {
-                    Name: "",
-                    Routes: ""
-                },
-                popupTemplate: point_template
-            })
-            view.graphics.remove(lastPoint);
+            if (i > 0) {
+                pointLayer.removeAll();
             }
-            
-            view.graphics.add(point);
+
+            pointLayer.add(point);
             i++;
-            
+
         }, 100)
-        
+
 
         /*_DataArrayConverted.forEach(pointInfo => {
 
@@ -364,7 +345,10 @@
             console.log(pointInfo);
             view.graphics.add(point);
 
-        })*/journeyFirstLast
+        })*/
+
+
+
 
         // show return journey
         returnJourney.addEventListener("click", function () {
@@ -453,43 +437,44 @@
                     arrayPointTemp[idPoint - 1] = arrayPoint[indexOfPoint];
                     indexOfPoint--;
                     idPoint++;;
-                    
+
                 }
                 arrayPoint = arrayPointTemp;
 
             }
         });
-       
+
         for (let i = 0; i < virtualPoint.length; i++) {
             virtualPoint[i].addEventListener("click", function (e) {
                 let idPoint = virtualPoint[i].getAttribute("value") - 1;
-                let point = [arrayPoint[idPoint].longitude,arrayPoint[idPoint].latitude]
+                let point = [arrayPoint[idPoint].longitude, arrayPoint[idPoint].latitude]
                 view.center = point;
             })
         }
 
         const track = new Track({
-          view: view,
-          graphic: new Graphic({
-            symbol: {
-              type: "simple-marker",
-              size: "12px",
-              color: "green",
-              outline: {
-                color: "#efefef",
-                width: "1.5px"
-              }
-            }
-          }),
-          useHeadingEnabled: false
+            view: view,
+            graphic: new Graphic({
+                symbol: {
+                    type: "simple-marker",
+                    size: "12px",
+                    color: "green",
+                    outline: {
+                        color: "#efefef",
+                        width: "1.5px"
+                    }
+                }
+            }),
+            useHeadingEnabled: false
         });
         view.ui.add(track, "top-left");
 
         const search = new Search({
-          //Add Search widget
-          view: view
+            //Add Search widget
+            view: view
         });
 
         view.ui.add(search, "top-right");
+
     });
 </script>

@@ -1,0 +1,94 @@
+body{
+  overflow: hidden;
+}
+.navbar-header {
+  background-color: #87CEFA !important; }
+.grid-container {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 30px; }
+
+.product-detail-grid {
+  grid-template-columns: 1.25fr 1.25fr 0.75fr; }
+
+.grid-item {
+  background-color: rgba(0, 243, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px; }
+
+.joyrney-scrollbar-home{
+  height: 95%;
+  width: 30%;
+}
+
+.scrollbar{
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #f7f7f7;
+}
+
+.card-link-home{
+  text-decoration: none;
+  color: #37b1d6;
+}
+
+.card-text{
+  color:black;
+}
+
+.homeapp{
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.title-style{
+  color: blue;
+  font-size: 30px;
+}
+
+.card-link{
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.card-link-item, .card-link-item a{
+  width: 100%;
+}
+
+.card-text{
+  text-decoration: none;
+}
+
+point:hover {
+  Color: blue;
+  
+}
+
+.mainform{
+  display: flex;
+  width: 100%; 
+  height: 100%;
+}
+
+.forminfor{
+  width: 40%;
+  height: 80%;
+  margin-right: 50px;
+  margin-bottom: 30px;
+}
+
+.form-group{
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+
+.containerbutton{
+  display: flex;
+  justify-content: space-between;
+}
